@@ -7,16 +7,20 @@
     $phone = filter_input(INPUT_POST, 'phone');
     $password = filter_input(INPUT_POST, 'password');
 
-    if ($firstName == null || $lastName == null || 
-        $email == null || $phone == null || $password == null) 
-        {
+    switch (true) {
+
+        case ($firstName == null || $lastName == null || 
+             $email == null || $phone == null || $password == null): 
+
             $_SESSION["add_error"] = "Invalid data. Check all
                 fields and try again.";
 
             $url = "../errors/error.php";
             header("Location: " . $url);
             die();
-        } else {
+        break;
+        
+        default:
             require_once('../model/database.php');
 
             $query = 'INSERT INTO technicians
@@ -33,6 +37,7 @@
 
             $statement->execute();
             $statement->closeCursor();
+        break;
         }
 
         $url = "index.php";

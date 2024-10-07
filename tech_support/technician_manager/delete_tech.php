@@ -3,8 +3,9 @@
 
   $tech_id = filter_input(INPUT_POST, 'tech_id', FILTER_VALIDATE_INT);
 
-  if ($tech_id != false)
-    {
+  switch (true) {
+    case ($tech_id != false):
+
       $query = 'DELETE FROM technicians
                 WHERE techID = :tech_id';
 
@@ -13,7 +14,11 @@
 
       $statement-> execute();
       $statement-> closeCursor();
-    }
+    break;
+
+    default:
+    break;
+  }
 
     $url = "index.php";
       header("Location: " . $url);

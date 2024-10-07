@@ -10,6 +10,12 @@
     $customer = $statement->fetch();
     $statement->closeCursor();
 
+    $queryCountries = 'SELECT * FROM countries';
+    $statementCountries = $db->prepare($queryCountries);
+    $statementCountries->execute();
+    $countries = $statementCountries->fetchAll();
+    $statementCountries->closeCursor();
+
 ?>
 
 <!DOCTYPE html>
@@ -58,8 +64,14 @@
           value = "<?php echo $customer['postalCode']; ?>" /><br />
 
           <label>Country:</label>
-          <input type="text" name="countryCode"
-          value = "<?php echo $customer['countryCode']; ?>" /><br />
+          <select name="countryCode">
+            <?php foreach ($countries as $country) : ?>
+            <option value="<?php echo $country['countryCode']; ?>"
+            <?php if ($country['countryCode'] == $customer['countryCode']) echo 'selected'; ?>>
+            <?php echo $country['countryCode']; ?>
+            </option>
+            <?php endforeach; ?>
+            </select><br />
 
           <label>Phone:</label>
           <input type="text" name="phone"

@@ -8,14 +8,18 @@
     // Check if the search form is submitted
     $lastName = filter_input(INPUT_POST, 'lastName', FILTER_SANITIZE_STRING);
 
-    if($lastName) {
+    switch (true) {
+        case ($lastName):
       $queryCustomers = 'SELECT * FROM customers WHERE lastName = :lastName';
       $statement1 = $db->prepare($queryCustomers);
       $statement1->bindValue(':lastName', $lastName);
-    } else {
+    break;
+
+    default:
       $queryCustomers = 'SELECT * FROM customers';
       $statement1 = $db->prepare($queryCustomers);
     }
+
     $statement1->execute();
     $customers = $statement1->fetchAll();
     $statement1->closeCursor();

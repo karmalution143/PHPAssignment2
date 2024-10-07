@@ -6,17 +6,26 @@
     $version = filter_input(INPUT_POST, 'version');
     $releaseDate = filter_input(INPUT_POST, 'releaseDate');
 
-    if ($productCode == null || $name == null || 
-        $version == null || $releaseDate == null) 
-        {
-            $_SESSION["add_error"] = "Invalid product data. Check all
-                fields and try again.";
+    switch (true) {
+        case ($productCode == null || $name == null || $version == null || $releaseDate == null):
+            $_SESSION["add_error"] = "Invalid product data. Check all fields and try again.";
+            $url = "../errors/error.php";
+            header("Location: " . $url);
+            die();
+            break;
 
+        default:
+            require_once('../model/database.php');
+
+            $timestamp = strtotime($releaseDate);
+        if ($timestamp === false) {
+            $_SESSION["add_error"] = "Invalid date format. Please use a standard date format YYYY-MM-DD.";
             $url = "../errors/error.php";
             header("Location: " . $url);
             die();
         } else {
-            require_once('../model/database.php');
+            $formattedReleaseDate = date('Y-m-d', $timestamp);
+        }
 
             $query = 'INSERT INTO products
                 (productCode, name, version, releaseDate)
@@ -27,7 +36,7 @@
             $statement->bindValue(':productCode', $productCode);
             $statement->bindValue(':name', $name);
             $statement->bindValue(':version', $version);
-            $statement->bindValue(':releaseDate', $releaseDate);
+            $statement->bindValue(':releaseDate', $formattedReleaseDate);
 
             $statement->execute();
             $statement->closeCursor();

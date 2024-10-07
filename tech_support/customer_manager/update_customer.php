@@ -2,7 +2,6 @@
     session_start();
 
     $customerID = filter_input(INPUT_POST, 'customerID');
-    // get the data from the database
     $firstName = filter_input(INPUT_POST, 'firstName');
     $lastName = filter_input(INPUT_POST, 'lastName');
     $address = filter_input(INPUT_POST, 'address');
@@ -14,21 +13,44 @@
     $email = filter_input(INPUT_POST, 'email');
     $password = filter_input(INPUT_POST, 'password');
 
-    // code to save to MySQL Database goes here
-    // Validate inputs
-    if ($firstName == null || $lastName == null
-        || $address == null || $city == null || $province == null
-        || $postalCode == null || $countryCode == null 
-        || $phone == null || $email == null) 
-        {
-            $_SESSION["add_error"] = "Invalid data. Check all
-                fields and try again.";
+    switch (true) {
+        case ($firstName == null):
+            $_SESSION["add_error"] = "First Name is required.";
+            break;
 
-            $url = "../errors/error.php";
-            header("Location: " . $url);
-            die();
+        case ($lastName == null):
+            $_SESSION["add_error"] = "Last Name is required.";
+            break;
 
-        } else {
+        case ($address == null):
+            $_SESSION["add_error"] = "Address is required.";
+            break;
+
+        case ($city == null):
+            $_SESSION["add_error"] = "City is required.";
+            break;
+
+        case ($province == null):
+            $_SESSION["add_error"] = "Province is required.";
+            break;
+
+        case ($postalCode == null):
+            $_SESSION["add_error"] = "Postal Code is required.";
+            break;
+
+        case ($countryCode == null):
+            $_SESSION["add_error"] = "Country Code is required.";
+            break;
+
+        case ($phone == null):
+            $_SESSION["add_error"] = "Phone number is required.";
+            break;
+
+        case ($email == null):
+            $_SESSION["add_error"] = "Email is required.";
+            break;
+
+        default:
             require_once('../model/database.php');
 
             $query = 'UPDATE customers
